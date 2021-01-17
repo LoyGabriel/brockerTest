@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,11 +29,17 @@ import lombok.Setter;
 public class UserDTO {
 	@Id
 	@GeneratedValue
-	private int userId;
+	@Column(name="userId")
+	private int id;
 	private String email;
 	private String firstName;
 	private String lastName;
-	@OneToMany(targetEntity = LoanDTO.class, cascade = CascadeType.ALL)
-	@JoinColumn(name="userId", referencedColumnName = "userId")
+	@OneToMany(targetEntity = LoanDTO.class, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<LoanDTO> loans;
+	
+	public UserDTO(String email, String firstName, String lastName) {
+		this.email=email;
+		this.firstName= firstName;
+		this.lastName= lastName;
+	}
 }

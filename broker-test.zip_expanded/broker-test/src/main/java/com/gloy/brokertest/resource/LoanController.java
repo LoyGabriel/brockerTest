@@ -25,14 +25,17 @@ public class LoanController {
 	LoanService loanService;
 
 	@GetMapping(value = "")
-	public List<LoanDTO> getLoans(
-			@RequestParam(value = "page", required = true) int page,
+	public List<LoanDTO> getLoans(@RequestParam(value = "page", required = true) int page,
 			@RequestParam(value = "size", required = true) int size,
 			@RequestParam(value = "user-id", required = false) Integer userId) {
-		if(Objects.isNull(userId)) {
-			return loanService.findLoans(page, size).getContent();
+		if (page >= 0 && size > 0) {
+			if (Objects.isNull(userId)) {
+				return loanService.findLoans(page, size).getContent();
+			} else {
+				return loanService.findLoansByUserId(page, size, userId.intValue()).getContent();
+			}
 		}else {
-			return loanService.findLoansByUserId(page, size, userId.intValue()).getContent();
+			return null;
 		}
 
 	}
@@ -44,6 +47,6 @@ public class LoanController {
 
 	@DeleteMapping(value = "/{loanId}")
 	public void deleteLoan(@PathVariable(value = "loanId") int loanId) {
-		loanService.deleteLoan(loanId);
+		loanService.deleteLoanById(loanId);
 	}
 }

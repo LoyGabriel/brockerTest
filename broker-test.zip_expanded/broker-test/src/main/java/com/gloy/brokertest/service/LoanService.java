@@ -30,8 +30,12 @@ public class LoanService {
 		return loanRepository.save(loanDTO);
 	}
 
-	public void deleteLoan(int loanId) {
+	public void deleteLoanById(int loanId) {
 		loanRepository.deleteById(loanId);
+	}
+	
+	public List<LoanDTO> addAll(List<LoanDTO>loansDTO){
+		return (List<LoanDTO>) loanRepository.saveAll(loansDTO);
 	}
 
 }
