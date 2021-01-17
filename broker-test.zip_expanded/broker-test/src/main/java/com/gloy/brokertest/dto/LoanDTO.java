@@ -7,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
@@ -16,16 +18,18 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="LOAN")
+@NoArgsConstructor
 public class LoanDTO {
 	@Id
 	@GeneratedValue
 	@Column(name="loan_id")
 	private int id;
 	private double total;
-	@JoinColumn(name="userId", referencedColumnName = "userId")
+	@Column(name="user_id")
 	private int userId;
 	
-	public LoanDTO(double total, int userId) {
+	public LoanDTO(int id, double total, int userId) {
+		this.id=id;
 		this.total=total;
 		this.userId=userId;
 	}

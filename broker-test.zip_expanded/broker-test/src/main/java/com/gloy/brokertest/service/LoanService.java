@@ -25,6 +25,10 @@ public class LoanService {
 		Pageable pagination= PageRequest.of(page, size);
 		return loanRepository.findAll(pagination);
 	}
+	
+	public List<LoanDTO> findLoansByUserId(int userId){
+		return loanRepository.findAllListByUserId(userId);
+	}
 
 	public LoanDTO createLoan(LoanDTO loanDTO) {
 		return loanRepository.save(loanDTO);
@@ -33,9 +37,9 @@ public class LoanService {
 	public void deleteLoanById(int loanId) {
 		loanRepository.deleteById(loanId);
 	}
-	
-	public List<LoanDTO> addAll(List<LoanDTO>loansDTO){
-		return (List<LoanDTO>) loanRepository.saveAll(loansDTO);
+
+	public void deleteLoans(List<LoanDTO>loans) {
+		loanRepository.deleteAll(loans);
 	}
 
 }

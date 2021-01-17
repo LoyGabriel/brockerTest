@@ -2,6 +2,7 @@ package com.gloy.brokertest.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.gloy.brokertest.dto.LoanDTO;
 import com.gloy.brokertest.dto.UserDTO;
 import com.gloy.brokertest.repository.LoanRepository;
 import com.gloy.brokertest.repository.UserRepository;
@@ -19,7 +21,7 @@ import com.gloy.brokertest.repository.UserRepository;
 public class UserService {
 
 	@Autowired
-	LoanRepository loanRepository;
+	LoanService loanService;
 
 	@Autowired
 	UserRepository userRepository;
@@ -29,7 +31,7 @@ public class UserService {
 	}
 
 	public UserDTO getUserById(int userId) throws Exception{
-		try {
+		try {			
 			return userRepository.findById(userId).orElse(null);
 		} catch (Exception e) {
 			throw new EntityNotFoundException("User with id " + userId + " not found");
@@ -47,6 +49,7 @@ public class UserService {
 
 	public void deleteUser(int userId) throws Exception{
 		try {
+			loanService.deleteLoans(loanService.findLoansByUserId(userId));
 			userRepository.deleteById(userId);
 		}catch(IllegalArgumentException e){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "UserId can't be null");
@@ -58,8 +61,5 @@ public class UserService {
 		}
 	}
 	
-	public List<UserDTO> addAll(List<UserDTO> users){
-		return userRepository.saveAll(users);
-	}
 
 }

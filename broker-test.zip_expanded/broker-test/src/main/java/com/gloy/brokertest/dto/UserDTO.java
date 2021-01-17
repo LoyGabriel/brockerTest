@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,12 +35,14 @@ public class UserDTO {
 	private String email;
 	private String firstName;
 	private String lastName;
-	@OneToMany(targetEntity = LoanDTO.class, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(targetEntity = LoanDTO.class,  cascade = CascadeType.REMOVE,orphanRemoval = true)
+	@JoinColumn(name="user_id", referencedColumnName = "userId")
 	private List<LoanDTO> loans;
 	
-	public UserDTO(String email, String firstName, String lastName) {
+	public UserDTO(String email, String firstName, String lastName, List<LoanDTO> loans) {
 		this.email=email;
 		this.firstName= firstName;
 		this.lastName= lastName;
+		this.loans=loans;
 	}
 }
